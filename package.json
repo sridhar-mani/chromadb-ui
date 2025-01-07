@@ -1,0 +1,40 @@
+{
+  "name": "chromadb-ui",
+  "version": "1.0.0",
+  "description": "A universal UI component for ChromaDB",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "babel src -d dist --extensions '.ts,.tsx'",
+    "build:types": "tsc --emitDeclarationOnly",
+    "dev": "babel src -d dist --extensions '.ts,.tsx' --watch"
+  },
+  "dependencies": {
+    "chromadb": "^1.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.0",
+    "@babel/plugin-transform-react-jsx": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/preset-react": "^7.23.0",
+    "@babel/preset-typescript": "^7.23.0",
+    "@types/react": "^18.0.0",
+    "typescript": "^4.9.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      [
+        "@babel/preset-react",
+        {
+          "runtime": "automatic"
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
+  }
+}
