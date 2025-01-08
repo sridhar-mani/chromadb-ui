@@ -1,3 +1,22 @@
-export type { ChromaDBConfig, Collection, Tenant } from './types';
-export {ChromaDBUI} from './components/ChromaDBUI';
-import './customElements';
+
+/*
+ * This file is part of ChromaDBUI.
+ *
+ * ChromaDBUI is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ChromaDBUI is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ChromaDBUI.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+export { ChromaDBUI } from './components/ChromaDBUI';
+
+export { ChromaDBProvider, useChromaDB } from './context/ChromaDBContext';
+export type { ChromaDBConfig } from './types';

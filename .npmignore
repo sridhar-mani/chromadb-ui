@@ -1,0 +1,33 @@
+# Source
+src/
+
+# Development
+node_modules/
+.git/
+.gitignore
+.npmignore
+.DS_Store
+*.log
+*.lock
+
+# Config files
+tsconfig.json
+rollup.config.js
+.eslintrc.js
+.prettierrc
+.babelrc
+
+# Tests
+__tests__/
+*.test.*
+*.spec.*
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Build process
+coverage/
+.env
+*.tgz
