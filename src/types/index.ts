@@ -67,6 +67,7 @@ export interface ChromaDBState {
   databaseName: string | null;
   collectionData: CollectionData | null;
   records: RecordType[]|null;
+  alert : (type: "info" | "success" | "warning" | "error", message: string)=>void
 }
 
 export interface ChromaDBContextType extends ChromaDBState {

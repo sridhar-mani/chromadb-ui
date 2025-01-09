@@ -21,13 +21,13 @@ import { useChromaDB } from '../context/ChromaDBContext';
 import type { ChromaDBConfig } from '../types';
 
 export const ConnectionPanel: React.FC = () => {
-  const { connect, disconnect, loading, error, connected, currentConfig } = useChromaDB();
+  const { connect, disconnect, loading, error, connected, currentConfig,alert } = useChromaDB();
   const [config, setConfig] = useState<ChromaDBConfig>({
     serverUrl: 'http://localhost:6789',
     tenant: '',
     database: ''
   });
-
+  
 
   useEffect(() => {
     if (currentConfig) {
@@ -43,93 +43,114 @@ export const ConnectionPanel: React.FC = () => {
       } else {
 
         if(config.database==="") config.database='default_database'
-        if(config.tenant==="") config.database='default_tenant'
+        if(config.tenant==="") config.tenant='default_tenant'
         await connect(config);
 
       }
     } catch (err) {
+      alert('error','please fill all the details')
       console.error('Connection error:', err);
     }
   };
 
+  const handleChange = (key: keyof ChromaDBConfig, value: string) => {
+    setConfig((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <div className="mb-8  !w-full " >
-      <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-50 rounded-lg border !w-full flex !flex-col gap-10 border-gray-200"style={{flexDirection:'column',alignItems:'center',gap:3}}>
-      <h2 className="text-xl text-center font-semibold text-gray-900" >Connection Settings</h2>
-        <div className='w-full'>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
+    <div
+    style={{
+      height: '35%',
+      backgroundColor: 'white',
+      borderRadius: '4px',
+      padding:15,
+      WebkitBorderRadius:25,
+      width:'90%'
+    }}
+  >
+    <form
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '95%',
+        gap: '10px',
+        color:'black',
+        width:'95%',
+      }}
+      onSubmit={handleSubmit}
+    >
+      <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Connection Settings</h2>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{display:'flex',alignItems:'center'}}>
+          <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem',width:'40%' }}>
             Server URL:
           </label>
           <input
             type="text"
+            style={{
+              width: '60%',
+              padding: '8px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+            }}
             value={config.serverUrl}
-            onChange={(e) => setConfig(prev => ({ ...prev, serverUrl: e.target.value }))}
-            className="w-full p-2 border border-gray-300 !rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="http://localhost:6789"
-            disabled={connected || loading}
-            required
+            onChange={(e) => handleChange('serverUrl', e.target.value)}
           />
         </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
-            Tenant (Optional):
+        <div style={{display:'flex',alignItems:'center'}}>
+          <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem',width:'40%' }}>
+            Tenant:
           </label>
           <input
             type="text"
+            style={{
+              width: '60%',
+              padding: '8px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+            }}
             value={config.tenant}
-            onChange={(e) => setConfig(prev => ({ ...prev, tenant: e.target.value }))}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter tenant name"
-            disabled={connected || loading}
+            onChange={(e) => handleChange('tenant', e.target.value)}
           />
         </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
-            Database (Optional):
+        <div style={{display:'flex',alignItems:'center'}}>
+          <label style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem',width:'40%' }}>
+            Database:
           </label>
           <input
             type="text"
+            style={{
+              width: '60%',
+              padding: '8px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+            }}
             value={config.database}
-            onChange={(e) => setConfig(prev => ({ ...prev, database: e.target.value }))}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter database name"
-            disabled={connected || loading}
+            onChange={(e) => handleChange('database', e.target.value)}
           />
         </div>
+      </div>
 
-        <button
-          type="submit"
-          disabled={loading || (!connected && !config.serverUrl)}
-          className={`w-full px-4 py-2 text-white rounded-md disabled:opacity-90 disabled:cursor-not-allowed transition-colors ${
-            connected 
-              ? 'bg-red-500 hover:bg-red-600' 
-              : 'bg-blue-500 hover:bg-blue-600'
-          }`}
-        >
-          {loading 
-            ? 'Processing...' 
-            : connected 
-              ? 'Disconnect' 
-              : 'Connect'
-          }
-        </button>
-      </form>
-
-      {error && (
-        <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md border border-red-200">
-          {error}
-        </div>
-      )}
-
-      {connected && !error && (
-        <div className="mt-4 p-4 bg-green-50 text-green-700 rounded-md border border-green-200">
-          Connected to ChromaDB server {config.serverUrl}
-          {config.tenant && ` (Tenant: ${config.tenant})`}
-          {config.database && ` (Database: ${config.database})`}
-        </div>
-      )}
-    </div>
+      <button
+        type="submit"
+        style={{
+          padding: '8px',
+          backgroundColor: '#05192D',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          width:'70%',
+          alignSelf:'center'
+        }}
+      >
+        {connected ? 'Disconnect' : 'Connect'}
+      </button>
+    </form>
+  </div>
   );
 };

@@ -19,6 +19,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { ChromaClient, GetResponse, IEmbeddingFunction } from 'chromadb';
 import { DefaultEmbeddingFunction } from 'chromadb';
 import type { ConnectionConfig, Collection, CreateCollectionParams, ChromaDBContextType, ChromaDBState, CollectionData } from '../types/index';
+import FloatingAlert from '../components/min-components/alert';
 
 
 
@@ -35,10 +36,23 @@ const initialState: ChromaDBState = {
   tenantName: null,
   databaseName: null,
   collectionData: null,
-  records: []
+  records: [],
+  alert: (type: "info" | "success" | "warning" | "error", message: string)=> console.log()
 };
 export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<ChromaDBState>(initialState);
+
+    const [alert, setAlert] = useState<{
+      message: string;
+      type: "info" | "success" | "warning" | "error";
+    } | null>(null);
+  
+  
+    const showAlert = (type: "info" | "success" | "warning" | "error", message: string) => {
+      setAlert({ type, message });
+      setTimeout(() => setAlert(null), 3000); 
+    };
+  
 
   const setLoading = useCallback((loading: boolean) => {
     setState(prev => ({ ...prev, loading }));
@@ -92,7 +106,8 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         error: null,
         loading: false,
         tenantName:config.tenant || null,
-        databaseName:config.database || null
+        databaseName:config.database || null,
+        alert:showAlert
       }));
 
       await refreshCollections();
@@ -199,11 +214,19 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     createCollection,
     deleteCollection,
     refreshCollections,
-    getRecords
+    getRecords,
+    showAlert
   };
 
   return (
     <ChromaDBContext.Provider value={value}>
+        {alert && (
+        <FloatingAlert
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       {children}
     </ChromaDBContext.Provider>
   );
