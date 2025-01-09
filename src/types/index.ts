@@ -1,4 +1,4 @@
-import type { ChromaClient, IEmbeddingFunction } from 'chromadb';
+import type { ChromaClient, GetResponse, IEmbeddingFunction } from 'chromadb';
 
 export interface ChromaDBConfig {
   serverUrl: string;
@@ -6,10 +6,7 @@ export interface ChromaDBConfig {
   database?: string;
 }
 
-export interface ConnectionConfig {
-  serverUrl: string;
-  tenant?: string;
-  database?: string;
+export interface ConnectionConfig extends ChromaDBConfig {
 }
 
 export interface Collection {
@@ -19,9 +16,12 @@ export interface Collection {
 
 export interface CollectionData {
   ids: string[];
-  embeddings?: number[][];
-  metadatas?: Record<string, any>[];
-  documents?: string[];
+  embeddings: number[][];
+  metadatas: Record<string, any>[];
+  documents: string[];
+  data?: any;
+  included?: string[];
+
 }
 
 export interface CreateCollectionParams {
@@ -49,6 +49,12 @@ export interface PaginationParams {
   offset?: number;
 }
 
+export interface RecordType{
+  embeddings : number[];
+  metadata:object
+}
+
+
 export interface ChromaDBState {
   client: ChromaClient | null;
   collections: string[];
@@ -56,7 +62,11 @@ export interface ChromaDBState {
   error: string | null;
   connected: boolean;
   currentConfig: ConnectionConfig | null;
-  embeddingFunction: any;
+  embeddingFunction: IEmbeddingFunction | undefined;
+  tenantName: string | null;
+  databaseName: string | null;
+  collectionData: CollectionData | null;
+  records: RecordType[]|null;
 }
 
 export interface ChromaDBContextType extends ChromaDBState {
@@ -65,6 +75,7 @@ export interface ChromaDBContextType extends ChromaDBState {
   createCollection: (params: CreateCollectionParams) => Promise<void>;
   deleteCollection: (name: string) => Promise<void>;
   refreshCollections: () => Promise<void>;
+  getRecords: (name:string)=> Promise<GetResponse | undefined>;
 }
 
 export interface ExtendedQueryParams {

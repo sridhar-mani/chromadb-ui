@@ -41,6 +41,9 @@ export const ConnectionPanel: React.FC = () => {
       if (connected) {
         disconnect();
       } else {
+
+        if(config.database==="") config.database='default_database'
+        if(config.tenant==="") config.database='default_tenant'
         await connect(config);
 
       }
@@ -50,11 +53,10 @@ export const ConnectionPanel: React.FC = () => {
   };
 
   return (
-    <div className="mb-8 left-block">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">Connection Settings</h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <div>
+    <div className="mb-8  !w-full " >
+      <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-50 rounded-lg border !w-full flex !flex-col gap-10 border-gray-200"style={{flexDirection:'column',alignItems:'center',gap:3}}>
+      <h2 className="text-xl text-center font-semibold text-gray-900" >Connection Settings</h2>
+        <div className='w-full'>
           <label className="block text-sm font-medium mb-1 text-gray-700">
             Server URL:
           </label>
@@ -62,7 +64,7 @@ export const ConnectionPanel: React.FC = () => {
             type="text"
             value={config.serverUrl}
             onChange={(e) => setConfig(prev => ({ ...prev, serverUrl: e.target.value }))}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 !rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             placeholder="http://localhost:6789"
             disabled={connected || loading}
             required

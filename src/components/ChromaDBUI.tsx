@@ -25,11 +25,17 @@ import { Rnd } from 'react-rnd'; 'react-rnd'
 export const ChromaDBUI: React.FC = () => {
   return (
     <ChromaDBProvider>
-      
-      <div className="p-6 max-w-screen mx-auto max-h-screen bg-white rounded-lg shadow wrapper">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900">ChromaDB Explorer</h1>
+      <div className="p-0  bg-white rounded-lg shadow wrapper" style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'start'}}>
+        <h1 className="text-2xl text-center font-bold mb-6 text-gray-900" style={{width:'100%', backgroundColor:'#05192D',color:'white',padding:3,textAlign:'center'}}>ChromaDB Explorer</h1>
+        <div className='flex' style={{width:'100%'}}>
+        <div className='flex' style={{width:'15%',height:'100%',display:'flex',flexDirection:'column'}}>
         <ConnectionPanel />
         <CollectionsPanel />
+        </div>
+        <div style={{width:'85%'}}>
+          fkldjhf
+        </div>
+        </div>
       </div>
     </ChromaDBProvider>
   );

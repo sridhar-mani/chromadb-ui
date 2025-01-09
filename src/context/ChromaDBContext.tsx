@@ -16,9 +16,9 @@
  */
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { ChromaClient, IEmbeddingFunction } from 'chromadb';
+import { ChromaClient, GetResponse, IEmbeddingFunction } from 'chromadb';
 import { DefaultEmbeddingFunction } from 'chromadb';
-import type { ConnectionConfig, Collection, CreateCollectionParams, ChromaDBContextType, ChromaDBState } from '../types/index';
+import type { ConnectionConfig, Collection, CreateCollectionParams, ChromaDBContextType, ChromaDBState, CollectionData } from '../types/index';
 
 
 
@@ -31,9 +31,12 @@ const initialState: ChromaDBState = {
   error: null,
   connected: false,
   currentConfig: null,
-  embeddingFunction: null
+  embeddingFunction: undefined,
+  tenantName: null,
+  databaseName: null,
+  collectionData: null,
+  records: []
 };
-
 export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<ChromaDBState>(initialState);
 
@@ -69,6 +72,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const connect = useCallback(async (config: ConnectionConfig) => {
     setLoading(true);
     setError(null);
+    
 
     try {
       const newClient = new ChromaClient({
@@ -77,7 +81,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       const newEmbeddingFunction = new DefaultEmbeddingFunction();
 
-      const res= await newClient.listCollections();
+      await newClient.listCollections();
 
       setState(prev => ({
         ...prev,
@@ -86,7 +90,9 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         currentConfig: config,
         embeddingFunction: newEmbeddingFunction,
         error: null,
-        loading: false
+        loading: false,
+        tenantName:config.tenant || null,
+        databaseName:config.database || null
       }));
 
       await refreshCollections();
@@ -96,11 +102,15 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         ...prev,
         client: null,
         collections: [],
+        loading: false,
+        error: null,
         connected: false,
         currentConfig: null,
-        embeddingFunction: null,
-        error: 'Failed to connect to ChromaDB server',
-        loading: false
+        embeddingFunction: undefined,
+        tenantName: null,
+        databaseName: null,
+        collectionData: null,
+        records: []
       }));
     }
   }, [refreshCollections]);
@@ -116,7 +126,6 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         embeddingFunction: params.embeddingFunction || state.embeddingFunction
       });
       
-      // Refresh collections after creation
       await refreshCollections();
     } catch (err) {
       console.error('Error creating collection:', err);
@@ -125,6 +134,42 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setLoading(false);
     }
   }, [state.client, state.embeddingFunction, refreshCollections]);
+
+
+  const getRecords = useCallback(async (name: string) => {
+    if (!state.client) throw new Error('No active connections');
+    setLoading(true);
+
+    try {
+      const collection = await state.client.getCollection({
+        name: name,
+        embeddingFunction: new DefaultEmbeddingFunction()
+      });
+
+      const response = await collection.get();
+      
+      // Handle potential null values and ensure the correct types
+      const collectionData: CollectionData = {
+        ids: response.ids || [],
+        embeddings: (response.embeddings || []).map(emb => Array.isArray(emb) ? emb : []),
+        metadatas: (response.metadatas || []).map(meta => meta || {}),
+        documents: (response.documents || []).map(doc => doc || ''),
+        included: response.included || []
+      };
+
+      setState(prev => ({
+        ...prev,
+        collectionData
+      }));
+      
+      return response;
+    } catch (err) {
+      console.error("Error getting records from collection:", err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [state.client, setLoading]);
 
   const deleteCollection = useCallback(async (name: string) => {
     if (!state.client) throw new Error('No active connection');
@@ -154,6 +199,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     createCollection,
     deleteCollection,
     refreshCollections,
+    getRecords
   };
 
   return (
