@@ -63,7 +63,7 @@ export const ConnectionPanel: React.FC = () => {
       height: '35%',
       backgroundColor: 'white',
       borderRadius: '4px',
-      padding:15,
+      padding:5,
       WebkitBorderRadius:25,
       width:'90%'
     }}

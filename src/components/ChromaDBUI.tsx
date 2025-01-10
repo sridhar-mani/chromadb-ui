@@ -21,6 +21,7 @@ import { ChromaDBProvider } from '../context/ChromaDBContext';
 import { ConnectionPanel } from './ConnectionPanel';
 import { CollectionsPanel } from './CollectionsPannel';
 import { Rnd } from 'react-rnd';import FloatingAlert from './min-components/alert';
+import RecordPanel from './RecordPanel';
  'react-rnd'
 
 export const ChromaDBUI: React.FC = () => {
@@ -30,12 +31,12 @@ export const ChromaDBUI: React.FC = () => {
       <div  style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',padding:0,margin:0,alignItems:'center',justifyContent:'start',color:'white',fontFamily:'sans-serif'}}>
         <h1 style={{width:'100%',height:'6%', backgroundColor:'#05192D',color:'white',padding:0,textAlign:'center',margin:0,borderBottom:'1px solid white'}}>ChromaDB Explorer</h1>
         <div style={{width:'100%',height:'94%',display:'flex',margin:0,padding:0,backgroundColor:'#05192D'}}>
-          <div  style={{width:'20%',height:'100%',display:'flex',padding:0,margin:0,flexDirection:'column',borderRight:'1px solid white',justifyContent:'space-evenly'}}>
+          <div  style={{width:'20%',height:'100%',display:'flex',padding:0,margin:0,flexDirection:'column',borderRight:'1px solid white',justifyContent:'space-evenly',alignItems:'center'}}>
             <ConnectionPanel />
             <CollectionsPanel />
           </div>
-          <div style={{width:'80%',padding:0,margin:0,height:'100%'}}>
-            fkldjhf
+          <div style={{width:'80%',padding:10,margin:0,height:'100%',overflow:'scroll',display:'flex',justifyContent:'center',alignItems:'flex-start'}}>
+            <RecordPanel></RecordPanel>
           </div>
         </div>
       </div>

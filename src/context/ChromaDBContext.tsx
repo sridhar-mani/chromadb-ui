@@ -174,7 +174,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       setState(prev => ({
         ...prev,
-        collectionData
+        collectionData:collectionData
       }));
       
       return response;
