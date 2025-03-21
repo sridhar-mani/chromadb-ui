@@ -29,7 +29,7 @@ export const ChromaDBUI: React.FC = () => {
     <ChromaDBProvider>
       <div  style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',padding:0,margin:0,alignItems:'center',justifyContent:'start',color:'white',fontFamily:'sans-serif'}}>
         <h1 style={{width:'100%',height:'6%', backgroundColor:'#05192D',color:'white',padding:0,textAlign:'center',margin:0,borderBottom:'1px solid white'}}>ChromaDB Explorer</h1>
-        <div style={{width:'100%',height:'94%',display:'flex',margin:0,padding:0,backgroundColor:'#05192D'}}>
+        <div style={{width:'100%',height:'94%',display:'flex',margin:0,padding:0,backgroundColor:'#05192D',flexDirection:'row'}}>
           <div  style={{width:'20%',height:'100%',display:'flex',padding:0,margin:0,flexDirection:'column',borderRight:'1px solid white',justifyContent:'space-evenly'}}>
             <ConnectionPanel />
             <CollectionsPanel />

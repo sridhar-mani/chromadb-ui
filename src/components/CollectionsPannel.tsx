@@ -72,8 +72,7 @@ export const CollectionsPanel: React.FC = () => {
 
   const handleGetRecords = async (name: string): Promise<void> => {
     try {
-      const res = await getRecords(name);
-      console.log(res);
+      await getRecords(name);
     } catch (err) {
       console.error('Error getting records:', err);
       setError(`Failed to get records from "${name}": ${err instanceof Error ? err.message : 'Unknown error'}`);
