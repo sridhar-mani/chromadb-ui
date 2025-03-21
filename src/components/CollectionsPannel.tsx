@@ -84,7 +84,7 @@ export const CollectionsPanel: React.FC = () => {
       height: '55%',
       backgroundColor: 'white',
       borderRadius: '4px',
-      padding: '10px',
+      padding: '5px',
       display: 'flex',
       flexDirection: 'column',
       WebkitBorderRadius:25,
@@ -95,13 +95,15 @@ export const CollectionsPanel: React.FC = () => {
       <div style={{
         display: 'flex',
         gap: '8px',
-        marginBottom: '15px'
+        marginBottom: '15px',
+        width:'100%'
       }}>
         <input style={{
           flex: 1,
           padding: '8px',
           border: '1px solid #ddd',
-          borderRadius: '4px'
+          borderRadius: '4px',
+          width:'70%'
         }} value={newCollectionName} onChange={(e)=>setNewCollectionName(e.target.value)} placeholder="New collection name" />
         <button style={{
           padding: '8px 16px',
@@ -111,7 +113,8 @@ export const CollectionsPanel: React.FC = () => {
           borderRadius: '4px',
           display: 'flex',
           alignItems: 'center',
-          gap: '4px'
+          gap: '4px',
+          width:'30%'
         }} onClick={()=>handleCreateCollection(newCollectionName)} >
           <Plus size={16} />
           Add
