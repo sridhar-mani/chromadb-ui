@@ -30,6 +30,15 @@ export interface CreateCollectionParams {
   embeddingFunction?: IEmbeddingFunction;
 }
 
+export interface RecordsProps {
+  data: {
+    ids: string[];
+    documents: string[];
+    metadatas: Record<string, any>[];
+    embeddings?: number[][];
+  } | null;
+}
+
 export interface  SelectedRecord {
   id: string;
   document: string;
@@ -68,6 +77,7 @@ export interface ChromaDBState {
   loading: boolean;
   error: string | null;
   connected: boolean;
+  curCollectionName:string ;
   currentConfig: ConnectionConfig | null;
   embeddingFunction: IEmbeddingFunction | undefined;
   tenantName: string | null;
@@ -84,6 +94,7 @@ export interface ChromaDBContextType extends ChromaDBState {
   deleteCollection: (name: string) => Promise<void>;
   refreshCollections: () => Promise<void>;
   getRecords: (name:string)=> Promise<GetResponse | undefined>;
+  addToCollection:(collectionName:string,record:SelectedRecord)=>Promise<void>;
 }
 
 export interface ExtendedQueryParams {

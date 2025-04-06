@@ -18,8 +18,9 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { ChromaClient, GetResponse, IEmbeddingFunction } from 'chromadb';
 import { DefaultEmbeddingFunction } from 'chromadb';
-import type { ConnectionConfig, Collection, CreateCollectionParams, ChromaDBContextType, ChromaDBState, CollectionData } from '../types/index';
+import type { ConnectionConfig, Collection, CreateCollectionParams, ChromaDBContextType, ChromaDBState, CollectionData, SelectedRecord } from '../types/index';
 import FloatingAlert from '../components/min-components/alert';
+import { ChromaService } from '../api/ChromaClient';
 
 
 
@@ -36,6 +37,7 @@ const initialState: ChromaDBState = {
   tenantName: null,
   databaseName: null,
   collectionData: null,
+  curCollectionName:'',
   records: [],
   alert: (type: "info" | "success" | "warning" | "error", message: string)=> console.log()
 };
@@ -125,6 +127,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         tenantName: null,
         databaseName: null,
         collectionData: null,
+        curCollectionName:'',
         records: []
       }));
     }
@@ -174,6 +177,7 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       setState(prev => ({
         ...prev,
+        curCollectionName:name,
         collectionData:collectionData
       }));
       
@@ -207,6 +211,28 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setState(initialState);
   }, []);
 
+  const addToCollection = useCallback(async (collectionName:string,record:SelectedRecord)=>{
+    if (!state.client) throw new Error('No active connection');
+    
+    setLoading(true);
+    try {
+      const collection = await state.client.getCollection({name:collectionName,embeddingFunction:new DefaultEmbeddingFunction()});
+      return await collection.add({
+        ids:record.id,
+        documents:record.document,
+        embeddings:record.embedding,
+        metadatas:record.metadata
+    
+      });
+    } catch (err) {
+      console.error('Error deleting collection:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  },[])
+
+
   const value = {
     ...state,
     connect,
@@ -215,8 +241,10 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     deleteCollection,
     refreshCollections,
     getRecords,
-    showAlert
+    showAlert,
+    addToCollection
   };
+
 
   return (
     <ChromaDBContext.Provider value={value}>

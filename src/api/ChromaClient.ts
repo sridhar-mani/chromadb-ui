@@ -24,7 +24,7 @@ import {
   Embeddings
 } from 'chromadb';
 import { DefaultEmbeddingFunction } from 'chromadb';
-import type { ChromaDBConfig } from '../types';
+import type { ChromaDBConfig, RecordType, SelectedRecord } from '../types';
 
 export interface ExtendedQueryParams {
   queryTexts?: string[];
@@ -139,6 +139,25 @@ export class ChromaService {
     } catch (error) {
       console.error('Error querying collection:', error);
       throw error;
+    }
+  }
+
+  async addToCollection(collectionName:string,record:SelectedRecord){
+    try{
+      const collection = await this.getCollection(collectionName);
+      return await collection.add({
+        ids:record.id,
+        documents:record.document,
+        embeddings:record.embedding,
+        metadatas:record.metadata
+    
+      });
+
+      
+    }catch(er){
+  console.error("Error during adding record to collection: ",er);
+  throw er;
+
     }
   }
 

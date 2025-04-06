@@ -1,6 +1,6 @@
 {
   "name": "@sridhar-mani/chromadb-ui",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.0-beta.12",
   "description": "A React UI component library for ChromaDB integration",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
