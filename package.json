@@ -56,7 +56,8 @@
     "rollup": "^2.79.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.9.0"
+    "typescript": "^4.9.0",
+    "cohere-ai": "^5.0.0 || ^6.0.0 || ^7.0.0"
   },
   "files": [
     "dist",
