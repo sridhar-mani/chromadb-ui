@@ -18,5 +18,9 @@
 
 export { ChromaDBUI } from './components/ChromaDBUI';
 
+export {CollectionsPanel} from './components/CollectionsPannel'
+export {ConnectionPanel} from  './components/ConnectionPanel'
+export {RecordPanel} from './components/RecordPanel'
+
 export { ChromaDBProvider, useChromaDB } from './context/ChromaDBContext';
 export type { ChromaDBConfig } from './types';

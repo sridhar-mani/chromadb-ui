@@ -30,6 +30,13 @@ export interface CreateCollectionParams {
   embeddingFunction?: IEmbeddingFunction;
 }
 
+export interface  SelectedRecord {
+  id: string;
+  document: string;
+  metadata: Record<string, any>;
+  embedding?: number[];
+}
+
 export interface GetCollectionParams {
   name: string;
   embeddingFunction?: IEmbeddingFunction;

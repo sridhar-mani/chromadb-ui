@@ -1,101 +1,232 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useChromaDB } from '../context/ChromaDBContext';
+import { SelectedRecord } from '../types';
+import { Plus } from 'lucide-react';
 
-const RecordPanel = () => {
+const RecordPanel: React.FC = () => {
   const { collectionData } = useChromaDB();
+  const [selectedRecord, setSelectedRecord] = useState<SelectedRecord | null>(null);
+  const [addModal,setAddModal]  = useState(false);
 
   if (!collectionData) {
     return (
-      <div style={{ 
-        width: '100%',
-        padding: '20px',
-        border: '1px solid #e5e7eb',
-        borderRadius: '8px',
-        backgroundColor: 'white'
-      }}>
-        <p style={{ color: '#6b7280' }}>No collection data available</p>
+      <div
+        style={{
+          width: '100%',
+          padding: '20px',
+          borderRadius: '10px',
+          backgroundColor: '#f3f4f6',
+          textAlign: 'center',
+        }}
+      >
+        <p style={{ color: 'black' }}>No collection data available</p>
       </div>
     );
   }
 
   return (
-    <div style={{ 
-      width: '95%',
-      border: '1px solid #e5e7eb',
-      borderRadius: '8px',
-      backgroundColor: 'white',
-      overflowY:'hidden'
-    }}>
-      <div style={{ 
-        width:'95%',
-        padding: '5px 10px',
-        borderBottom: '1px solid #e5e7eb'
-      }}>
-        <h2 style={{ 
+    <div style={{ width: '100%' }}>
+      <h2
+        style={{
           fontSize: '1.5rem',
-          fontWeight: '600',
-          color: '#111827'
-        }}>Collection Records</h2>
-      </div>
+          fontWeight: 'bold',
+          color: 'black',
+          marginBottom: '16px',
+        }}
+      >
+        Chroma Records
+        <button style={{
+          padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          width:'30%'
+        }} onClick={()=>setAddModal(!addModal)} >
+          <Plus size={16} />
+          Add
+        </button>
+      </h2>
 
-      <div style={{ padding: '5px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {collectionData.ids.map((id, index) => (
-            <div key={id} style={{
-              border: '1px solid #e5e7eb',
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        {collectionData.ids.map((id, index) => (
+          <div
+            key={id}
+            onClick={() =>
+              setSelectedRecord({
+                id,
+                document: collectionData.documents[index],
+                metadata: collectionData.metadatas[index],
+                embedding: collectionData.embeddings?.[index],
+              })
+            }
+            style={{
+              background: '#fff',
+              border: '1px solid #d1d5db',
               borderRadius: '8px',
-              padding: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}>
-              <div style={{
+              padding: '12px',
+              width: '200px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              color: 'black',
+              transition: 'transform 0.1s ease',
+            }}
+          >
+            <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>ID</div>
+            <div
+              style={{
+                fontSize: '0.875rem',
+                color: 'black',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {id}
+            </div>
+            <div style={{ fontSize: '0.75rem', marginTop: '8px', color: '#111' }}>
+              {collectionData.documents[index]?.slice(0, 40)}...
+            </div>
+          </div>
+        ))}
+      </div>
+      {addModal &&
+          <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+               <div
+            style={{
+              background: 'white',
+              padding: '24px',
+              borderRadius: '10px',
+              width: '90%',
+              maxWidth: '600px',
+              maxHeight: '80%',
+              overflowY: 'auto',
+              color: 'black',
+            }}
+          >
+          </div>
+        </div>
+      }
+
+      {/* Modal */}
+      {selectedRecord && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              background: 'white',
+              padding: '24px',
+              borderRadius: '10px',
+              width: '90%',
+              maxWidth: '600px',
+              maxHeight: '80%',
+              overflowY: 'auto',
+              color: 'black',
+            }}
+          >
+            <div
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <span style={{ fontWeight: '500' }}>ID: {id}</span>
-              </div>
-              
-              {collectionData.documents[index] && (
-                <div style={{ fontSize: '0.875rem' }}>
-                  <span style={{ fontWeight: '500' }}>Document: </span>
-                  <span style={{ color: '#4b5563' }}>
-                    {collectionData.documents[index]}
-                  </span>
-                </div>
-              )}
-              
-              {collectionData.metadatas[index] && (
-                <div style={{ fontSize: '0.875rem' }}>
-                  <span style={{ fontWeight: '500' }}>Metadata: </span>
-                  <pre style={{ 
-                    color: '#4b5563',
-                    margin: 0,
-                    fontSize: '0.875rem',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word'
-                  }}>
-                    {JSON.stringify(collectionData.metadatas[index], null, 2)}
-                  </pre>
-                </div>
-              )}
-
-              {collectionData.embeddings && collectionData.embeddings[index] && (
-                <div style={{ fontSize: '0.875rem' }}>
-                  <span style={{ fontWeight: '500' }}>Embedding: </span>
-                  <span style={{ color: '#4b5563' }}>
-                    [{collectionData.embeddings[index].slice(0, 3).join(', ')}
-                    {collectionData.embeddings[index].length > 3 ? '...' : ''}]
-                  </span>
-                </div>
-              )}
+                alignItems: 'center',
+                marginBottom: '16px',
+              }}
+            >
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>
+                Record Details
+              </h3>
+              <button
+                onClick={() => setSelectedRecord(null)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: 'black',
+                }}
+              >
+                ✕
+              </button>
             </div>
-          ))}
+
+            <div style={{ marginBottom: '12px' }}>
+              <strong>ID:</strong> {selectedRecord.id}
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <strong>Document:</strong>
+              <div
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  marginTop: '4px',
+                  background: '#f3f4f6',
+                  padding: '8px',
+                  borderRadius: '4px',
+                }}
+              >
+                {selectedRecord.document}
+              </div>
+            </div>
+            {selectedRecord.metadata && (
+              <div style={{ marginBottom: '12px' }}>
+                <strong>Metadata:</strong>
+                <pre
+                  style={{
+                    background: '#f3f4f6',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                    fontFamily: 'monospace',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    marginTop: '4px',
+                  }}
+                >
+                  {JSON.stringify(selectedRecord.metadata, null, 2)}
+                </pre>
+              </div>
+            )}
+            {selectedRecord.embedding && (
+              <div style={{ marginBottom: '12px' }}>
+                <strong>Embedding:</strong> [
+                {selectedRecord.embedding.slice(0, 5).join(', ')}
+                {selectedRecord.embedding.length > 5 ? ', ...' : ''}
+                ]
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default RecordPanel;
+export { RecordPanel };
