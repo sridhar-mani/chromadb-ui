@@ -27,7 +27,7 @@ export const ChromaDBUI: React.FC = () => {
         >
           <aside
             style={{
-              width: "20%",
+              width: "22%",
               padding: "16px",
               backgroundColor: "#ffffff",
               borderRight: "1px solid #e5e7eb",
@@ -38,7 +38,7 @@ export const ChromaDBUI: React.FC = () => {
           </aside>
           <main
             style={{
-              width: "80%",
+              width: "78%",
               padding: "16px",
               overflowY: "auto",
               backgroundColor: "#f9fafb",

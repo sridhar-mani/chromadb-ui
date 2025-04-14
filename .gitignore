@@ -28,3 +28,11 @@ dist/
 *.log
 .cache/
 .env
+
+testing/
+testing
+testing/*
+
+chroma/
+chroma
+chroma/*
