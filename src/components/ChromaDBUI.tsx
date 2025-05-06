@@ -28,16 +28,45 @@ export const ChromaDBUI: React.FC = () => {
 
   return (
     <ChromaDBProvider>
-      <div  style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',padding:0,margin:0,alignItems:'center',justifyContent:'start',color:'white',fontFamily:'sans-serif'}}>
-        <h1 style={{width:'100%',height:'6%', backgroundColor:'#05192D',color:'white',padding:0,textAlign:'center',margin:0,borderBottom:'1px solid white'}}>ChromaDB Explorer</h1>
-        <div style={{width:'100%',height:'94%',display:'flex',margin:0,padding:0,backgroundColor:'#05192D'}}>
-          <div  style={{width:'20%',height:'100%',display:'flex',padding:0,margin:0,flexDirection:'column',borderRight:'1px solid white',justifyContent:'space-evenly',alignItems:'center'}}>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          fontFamily: "sans-serif",
+          backgroundColor: "#f9fafb",
+          color: "black",
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            overflow: "hidden",
+          }}
+        >
+          <aside
+            style={{
+              width: "20%",
+              padding: "16px",
+              backgroundColor: "#ffffff",
+              borderRight: "1px solid #e5e7eb",
+            }}
+          >
             <ConnectionPanel />
             <CollectionsPanel />
-          </div>
-          <div style={{width:'80%',padding:10,margin:0,height:'100%',overflow:'scroll',display:'flex',justifyContent:'center',alignItems:'flex-start'}}>
-            <RecordPanel></RecordPanel>
-          </div>
+          </aside>
+          <main
+            style={{
+              width: "80%",
+              padding: "16px",
+              overflowY: "auto",
+              backgroundColor: "#f9fafb",
+            }}
+          >
+            <RecordPanel />
+          </main>
         </div>
       </div>
     
