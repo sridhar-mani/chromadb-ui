@@ -212,9 +212,7 @@ Changes will be reflected in your test project automatically.
    - If you still get issues then use this command (**chroma run test.yaml**) after copying content below:
 
 
-########################
-# HTTP server settings #
-########################
+```yaml
 open_telemetry:
   service_name: "chroma"
   endpoint: "http://otel-collector:4317"
@@ -224,10 +222,6 @@ max_payload_size_bytes: 41943040
 cors_allow_origins:
   - "http://localhost:5173"  # Or any other domain you need
 
-
-####################
-# General settings #
-####################
 persist_path: "./chroma"
 allow_reset: false # defaults to false
 sqlitedb:
@@ -237,6 +231,7 @@ sysdb:
   sqlite:
     log_topic_namespace: "default"
     log_tenant: "default"
+```
 
 2. **Styling Issues**
    - Verify Tailwind CSS is properly configured
