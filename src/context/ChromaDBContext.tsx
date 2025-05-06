@@ -186,6 +186,44 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [state.client, setLoading]);
 
+  const addRecord = useCallback(async(record:any)=>{
+    if (!state.client) throw new Error('No active connection');
+
+    const url = `${state.currentConfig?.serverUrl}/api/v2/tenants/default_tenant/documents`
+    const document={
+      tenant:state.tenantName,
+      document_id: record.doc_id??Math.random().toString(36).substr(2, length),
+      content: record.doc_content,
+      metadata:{
+        ...record.metadata
+      }
+    }
+    try{
+      const res = await fetch(
+        url,{
+          method:'POST',
+          headers:{
+            "Content-Type":"application/json",
+          },
+          body:JSON.stringify(document)
+        }
+      )
+
+      const data = await res.json();
+
+      if(res.ok){
+        console.log('Document added successfully',data);
+      }else{
+        console.log('Error adding successfully',data);
+
+      }
+    }catch(err){
+      console.error("Error in fetching:",err);
+      
+    }
+
+  },[state.client]);
+
   const deleteCollection = useCallback(async (name: string) => {
     if (!state.client) throw new Error('No active connection');
 
@@ -215,7 +253,8 @@ export const ChromaDBProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     deleteCollection,
     refreshCollections,
     getRecords,
-    showAlert
+    showAlert,
+    addRecord
   };
 
   return (

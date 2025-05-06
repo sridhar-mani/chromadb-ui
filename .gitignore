@@ -28,3 +28,7 @@ dist/
 *.log
 .cache/
 .env
+
+example
+example/*
+example/

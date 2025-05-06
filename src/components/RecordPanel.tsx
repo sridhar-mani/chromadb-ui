@@ -24,18 +24,30 @@ const RecordPanel = () => {
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
       backgroundColor: 'white',
-      overflowY:'hidden'
+      overflowY:'hidden',
     }}>
       <div style={{ 
         width:'95%',
         padding: '5px 10px',
-        borderBottom: '1px solid #e5e7eb'
+        borderBottom: '1px solid #e5e7eb',
+      display:'flex'
+        ,justifyContent:'space-between'
       }}>
         <h2 style={{ 
           fontSize: '1.5rem',
           fontWeight: '600',
           color: '#111827'
         }}>Collection Records</h2>
+        <button style={{ padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          
+          }}>+ Add Record</button>
       </div>
 
       <div style={{ padding: '5px' }}>
