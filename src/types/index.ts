@@ -77,6 +77,7 @@ export interface ChromaDBContextType extends ChromaDBState {
   deleteCollection: (name: string) => Promise<void>;
   refreshCollections: () => Promise<void>;
   getRecords: (name:string)=> Promise<GetResponse | undefined>;
+  addRecord: (record:any)=>Promise<void>;
 }
 
 export interface ExtendedQueryParams {

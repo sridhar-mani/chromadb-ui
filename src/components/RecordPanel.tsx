@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useChromaDB } from '../context/ChromaDBContext';
+import RecordsForm from './RecordsForm';
 
 const RecordPanel = () => {
   const { collectionData } = useChromaDB();
+  const [open,setisOpen] = useState(false)
+  const openModel = ()=>setisOpen(!open)
 
   if (!collectionData) {
     return (
@@ -47,7 +50,7 @@ const RecordPanel = () => {
           alignItems: 'center',
           gap: '4px',
           
-          }}>+ Add Record</button>
+          }} onClick={openModel}>+ Add Record</button>
       </div>
 
       <div style={{ padding: '5px' }}>
@@ -106,6 +109,7 @@ const RecordPanel = () => {
           ))}
         </div>
       </div>
+      {open && <RecordsForm modalOpen={openModel}></RecordsForm>}
     </div>
   );
 };
