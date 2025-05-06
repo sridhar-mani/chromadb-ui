@@ -209,6 +209,34 @@ Changes will be reflected in your test project automatically.
    - Check the server URL in your configuration
    - Verify network connectivity
    - Also ensure to set cors for the url of chromadb
+   - If you still get issues then use this command (**chroma run test.yaml**) after copying content below:
+
+
+########################
+# HTTP server settings #
+########################
+open_telemetry:
+  service_name: "chroma"
+  endpoint: "http://otel-collector:4317"
+port: 6789
+listen_address: "0.0.0.0"
+max_payload_size_bytes: 41943040
+cors_allow_origins:
+  - "http://localhost:5173"  # Or any other domain you need
+
+
+####################
+# General settings #
+####################
+persist_path: "./chroma"
+allow_reset: false # defaults to false
+sqlitedb:
+  hash_type: "md5" # or "sha256"
+  migration_mode: "apply" # or "validate"
+sysdb:
+  sqlite:
+    log_topic_namespace: "default"
+    log_tenant: "default"
 
 2. **Styling Issues**
    - Verify Tailwind CSS is properly configured
